@@ -14,9 +14,9 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 #db = SQL("sqlite:///catalog.db")
 
 
-uri = os.getenv("postgres://catalog_c18n_user:J8GNIRkxnCUXAM7D40atSceEHbdgZzz3@dpg-ce4d7e5a4995pbufm7dg-a.frankfurt-postgres.render.com/catalog_c18n")
-if uri.startswith("postgres://"):
-    uri = uri.replace("postgres://", "postgresql://")
+uri = os.getenv("postgresql://catalog_c18n_user:J8GNIRkxnCUXAM7D40atSceEHbdgZzz3@dpg-ce4d7e5a4995pbufm7dg-a.frankfurt-postgres.render.com/catalog_c18n")
+#if uri.startswith("postgres://"):
+    #uri = uri.replace("postgres://", "postgresql://")
 db = SQL(uri)
 
 
