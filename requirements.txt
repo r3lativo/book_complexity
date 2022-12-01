@@ -6,7 +6,6 @@ psycopg2
 requests
 pandas
 html2text
-json
 plotly
 langcodes
 nltk
