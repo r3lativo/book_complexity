@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    | Search
+{% endblock %}
+
+{% block main %}
+    <form class="text-center my-3" id='container' action="/search" method="post">
+        <div class="mb-3">
+            <select id="h_button" class="form-select mx-auto w-auto btn-dark" name="filter">
+                {% for i in options %}
+                    <option value="{{ i }}"> {{ i.title() }} </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <input id="black_input" autocomplete="off" autofocus class="dark-mode form-control mx-auto w-auto" name="query" type="text">
+        </div>
+        <button class="btn btn-dark center" type="submit">Search</button>
+    </form>
+{% endblock %}

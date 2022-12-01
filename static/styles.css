@@ -1,0 +1,82 @@
+a {
+  color: rgb(185, 121, 0);     /* oranges! yey */
+}
+
+a:hover {
+  color: orange
+}
+
+.btn-dark:hover {
+  color: orange
+}
+
+.cover {
+  max-width: 200px;
+  height: auto;
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: white;
+  text-align: center;
+}
+
+.dark-mode {
+  color: rgb(209, 205, 199);
+  background-color: rgb(24, 26, 27);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.darker-mode {
+  color: rgb(209, 205, 199);
+  background-color: rgb(14, 16, 17);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dark-inside {
+  color: rgb(209, 205, 199);
+  background-color: rgb(50, 52, 53);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.figure-caption {
+  font-size: .625rem;
+  text-align: right !important;
+}
+
+.figure-img {
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.container {
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 0;
+  width: 100%;
+  padding-right: calc(var(--bs-gutter-x) * .5);
+  padding-left: calc(var(--bs-gutter-x) * .5);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+dt {
+  color: orange
+}
+
+input[type=text]:focus{
+  color: rgb(209, 205, 199);
+  background-color: rgb(50, 52, 53);
+  -webkit-tap-highlight-color: transparent;
+  outline: 2px solid orange;     /* oranges! yey */
+}
+
+tbody {
+  color: rgb(209, 205, 199);
+}
+
+thead {
+  color: rgb(209, 205, 199);
+}

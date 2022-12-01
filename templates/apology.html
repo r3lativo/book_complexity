@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    | Apology
+{% endblock %}
+
+{% block main %}
+    <div class="mb-5 container text-center">
+        <!-- https://memegen.link/ -->
+        <img alt="{{ top }}" class="border img-fluid mb-3" src="http://memegen.link/custom/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?alt=https://i.imgur.com/vIit0y5.jpeg" title="{{ top }}">
+
+        <p><a href="/search">{{ optional }}</a></p>
+    </div>
+{% endblock %}
