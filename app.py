@@ -11,15 +11,15 @@ app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 # Configure CS50 Library to use SQLite database
-#db = SQL("sqlite:///catalog.db")
+db = SQL("sqlite:///catalog.db")
 
-
+'''
 uri = os.getenv("postgres://catalog_c18n_user:J8GNIRkxnCUXAM7D40atSceEHbdgZzz3@dpg-ce4d7e5a4995pbufm7dg-a/catalog_c18n")
 if uri.startswith("postgres://"):
     uri = uri.replace("postgres://", "postgresql://")
 db = SQL(uri)
 
-
+'''
 
 
 # Main page
