@@ -1,4 +1,4 @@
-import html2text, json, string, requests, plotly, nltk
+import html2text, json, string, requests, plotly, nltk, os
 import pandas as pd
 import plotly.express as px
 from flask import render_template
@@ -102,6 +102,22 @@ def create_word_list(text):
     return words
 
 
+def delete_temp_files():
+    if os.path.exists("original.txt"):
+        os.remove("original.txt")
+    if os.path.exists("cleaned.txt"):
+        os.remove("cleaned.txt")
+    if os.path.exists("jsons/paragraphs.json"):
+        os.remove("jsons/paragraphs.json")
+    if os.path.exists("jsons/sentences.json"):
+        os.remove("jsons/sentences.json")
+    if os.path.exists("jsons/words.json"):
+        os.remove("jsons/words.json")
+    if os.path.exists("jsons/words_ns.json"):
+        os.remove("jsons/words_ns.json")
+    return
+
+
 '''Create a filtered dictionary'''
 def filter_dict(freq_d, ranked_list):
     filtered_d = {}
@@ -168,8 +184,8 @@ def get_link_to_folder(id):
     return folder_link
 
 
-'''Get text file from gutenberg project'''
-def get_text_from_htm(folder_link, id):
+'''Get link to htm of gutenberg project book'''
+def get_link_to_htm(folder_link, id):
     # Go to the htm file
     id_h = (id + '-h')
     link_to_test = folder_link + '/' + id_h + '/' + id_h + '.htm'
@@ -178,11 +194,17 @@ def get_text_from_htm(folder_link, id):
     # Ensure link is working 
     response = requests.get(link_to_test)
     if response.status_code == 200:
-        response = response.text
-        text = html2text.html2text(response)
-        return text
+        return link_to_test
     else:
         return 404
+
+
+'''Convert link into text'''
+def get_text_from_htm(htm_link):
+    # Ensure link is working 
+    response = requests.get(htm_link).text
+    text = html2text.html2text(response)
+    return text
 
 
 '''Remove punctuation from text'''

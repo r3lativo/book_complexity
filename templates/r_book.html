@@ -4,8 +4,12 @@
 
 {% block main %}
 
-    <div style="max-width: 840px; margin:auto ">
-        
+    <div class="container mb-3 text-center">
+        <h4 class="mb-2">{{ author }}</h4>
+        <h1 class="mb-2">{{ title }}</h1>
+        <iframe id="myFrame" class="responsive-iframe" src="{{  htm_link }}" title="Random book" style="background-color: rgb(209, 205, 199);"></iframe>
     </div>
+    
+
     
 {% endblock %}

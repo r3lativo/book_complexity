@@ -1,4 +1,4 @@
-import NLP
+import NLP, random
 from flask import Flask, render_template, request
 from cs50 import SQL
 
@@ -35,11 +35,14 @@ def analysis():
     if supp_lang == 1:
         return NLP.apology("Language not supported :(", 400, 'Try with another book!')
 
-    # Get text from the htm
+    # Get link to the htm
     folder_link = NLP.get_link_to_folder(id)
-    gutenberg_text = NLP.get_text_from_htm(folder_link, id)
-    if gutenberg_text == 404:
+    htm_link = NLP.get_link_to_htm(folder_link, id)
+    if htm_link == 404:
         return NLP.apology("File not found", 404, 'Try with another book!')
+
+    # Convert htm to text
+    gutenberg_text = NLP.get_text_from_htm(htm_link)
 
     # Clean text from Gutenberg things
     cleaned_file = NLP.first_clean(gutenberg_text)
@@ -67,6 +70,8 @@ def analysis():
     words_ns_count = len(words_ns)
     # s_count = len(sentences)
     # p_count = len(paragraphs)
+
+    NLP.delete_temp_files()
         
     return render_template("analysis.html", graphJSON=graphJSON, title=title, author=author, words_ns_count=words_ns_count, folder_link=folder_link) #s_count=s_count, p_count=p_count, cover=cover, 
 
@@ -80,7 +85,7 @@ def contact():
 '''Random book page'''
 @app.route("/r_book")
 def r_book():
-    '''
+
     # Select IDs of texts
     text_ids = db.execute("SELECT id FROM catalog WHERE type = 'Text'")
     cleaned_ids = []
@@ -88,13 +93,18 @@ def r_book():
         cleaned_ids.append(i['id'])
 
     # Pick a random text to show
-    rn = random.choice(cleaned_ids)
+    r_id = random.choice(cleaned_ids)
+    r_info = db.execute("SELECT title, authors FROM catalog WHERE id = ?", r_id)
 
-    link = NLP.get_link_to_folder(rn)
+    # Extract infos
+    title = r_info[0]['title']
+    author = r_info[0]['authors']
 
-    # Show book
-    '''
-    return NLP.apology("Work in progress", 400, 'Go to manual search')
+    # Get the htm file
+    folder_link = NLP.get_link_to_folder(r_id)
+    htm_link = NLP.get_link_to_htm(folder_link, r_id)
+
+    return render_template("r_book.html", htm_link= htm_link, title=title, author=author)
 
 
 '''Search page'''

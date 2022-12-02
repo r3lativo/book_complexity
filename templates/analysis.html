@@ -4,8 +4,8 @@
 
 {% block main %}
     <div class="mb-5 container text-center">
-        <h2 class="mb-2">{{ author }}</h4>
-        <h1 class="mb-2"><a target="_blank" rel="noopener noreferrer" href="{{ folder_link }}">{{ title }}</a></h2>
+        <h4 class="mb-2">{{ author }}</h4>
+        <h1 class="mb-2"><a target="_blank" rel="noopener noreferrer" href="{{ folder_link }}">{{ title }}</a></h1>
         <em>Tokenized words without stopwords: {{ words_ns_count }}</em>
         <div id='chart' class='chart'></div>
         <div>

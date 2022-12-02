@@ -15,6 +15,13 @@ a:hover {
   height: auto;
 }
 
+.responsive-iframe {
+  min-height:75vh;
+  width: 100%;
+  border: none;
+  overflow: hidden;
+}
+
 .footer {
   position: fixed;
   left: 0;
