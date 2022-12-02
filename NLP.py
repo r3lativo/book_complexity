@@ -8,9 +8,9 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.probability import FreqDist
 from nltk.corpus import stopwords
 
-nltk.download('stopwords')
-nltk.download('punkt')
 
+# Add nltk path
+nltk.data.path.append('/nltk_data')
 
 """Render message as an apology to user."""
 def apology(message, code=400, optional=''):
@@ -29,8 +29,10 @@ def apology(message, code=400, optional=''):
 
 def check_language_manually(lang):
     supported_languages = ['ar', 'az', 'eu', 'bn', 'ca', 'zh', 'da', 'nl', 'en', 'fi', 'fr', 'de', 'el', 'he', 'hinglish', 'hu', 'id', 'it', 'kk', 'ne', 'no', 'pt', 'ro', 'ru', 'sl', 'es', 'sv', 'tg', 'tr']
-    if lang in supported_languages:
-        return lang
+    full_name = ['arabic', 'azerbaijani', 'basque', 'bengali', 'catalan', 'chinese', 'danish', 'dutch', 'english', 'finnish', 'french', 'german', 'greek', 'hebrew', 'hinglish', 'hungarian', 'indonesian', 'italian', 'kazakh', 'nepali', 'norwegian', 'portuguese', 'romanian', 'russian', 'slovene', 'spanish', 'swedish', 'tajik', 'turkish']
+    res = {supported_languages[i]: full_name[i] for i in range(len(supported_languages))}
+    if lang in res:
+        return res[lang]
     else:
         return 1
 
