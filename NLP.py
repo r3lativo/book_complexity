@@ -1,4 +1,4 @@
-import html2text, json, string, requests, plotly, nltk, language_data
+import html2text, json, string, requests, plotly, nltk
 import pandas as pd
 import plotly.express as px
 
