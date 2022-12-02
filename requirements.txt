@@ -7,6 +7,4 @@ requests
 pandas
 html2text
 plotly
-langcodes
 nltk
-langcodes[data]

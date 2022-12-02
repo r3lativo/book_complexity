@@ -40,7 +40,7 @@ def analysis():
     lang = info[0]['language']
 
     # Check whether the language is supported
-    supp_lang = NLP.check_language(lang)
+    supp_lang = NLP.check_language_manually(lang)
     if supp_lang == 1:
         return NLP.apology("Language not supported :(", 400, 'Try with another book!')
 

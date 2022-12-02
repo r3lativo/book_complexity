@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 
 from flask import render_template
-from langcodes import Language
+#from langcodes import Language
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.probability import FreqDist
 from nltk.corpus import stopwords
@@ -27,6 +27,15 @@ def apology(message, code=400, optional=''):
     return render_template("apology.html", optional=optional,top=code, bottom=escape(message)), code
 
 
+def check_language_manually(lang):
+    supported_languages = ['ar', 'az', 'eu', 'bn', 'ca', 'zh', 'da', 'nl', 'en', 'fi', 'fr', 'de', 'el', 'he', 'hinglish', 'hu', 'id', 'it', 'kk', 'ne', 'no', 'pt', 'ro', 'ru', 'sl', 'es', 'sv', 'tg', 'tr']
+    if lang in supported_languages:
+        return lang
+    else:
+        return 1
+
+
+'''
 def check_language(lang):
     supported_languages = stopwords.fileids()
     full_name = Language.make(language=lang).display_name()
@@ -35,6 +44,7 @@ def check_language(lang):
         return full_name
     else:
         return 1
+'''
 
 
 '''Create a dictionary of words and frequency distribution'''
