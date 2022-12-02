@@ -10,7 +10,7 @@ from nltk.corpus import stopwords
 
 
 # Add nltk path
-nltk.data.path.append('/nltk_data')
+nltk.data.path.append('nltk_data')
 
 """Render message as an apology to user."""
 def apology(message, code=400, optional=''):
