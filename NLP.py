@@ -9,6 +9,8 @@ from nltk.probability import FreqDist
 from nltk.corpus import stopwords
 
 nltk.download('stopwords')
+nltk.download('punkt')
+
 
 """Render message as an apology to user."""
 def apology(message, code=400, optional=''):
