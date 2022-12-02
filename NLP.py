@@ -1,4 +1,4 @@
-import html2text, json, string, requests, plotly
+import html2text, json, string, requests, plotly, nltk
 import pandas as pd
 import plotly.express as px
 
@@ -7,6 +7,8 @@ from langcodes import Language
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.probability import FreqDist
 from nltk.corpus import stopwords
+
+nltk.download('stopwords')
 
 """Render message as an apology to user."""
 def apology(message, code=400, optional=''):
