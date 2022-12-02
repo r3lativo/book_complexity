@@ -1,9 +1,7 @@
 import html2text, json, string, requests, plotly, nltk
 import pandas as pd
 import plotly.express as px
-
 from flask import render_template
-#from langcodes import Language
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.probability import FreqDist
 from nltk.corpus import stopwords
@@ -11,6 +9,7 @@ from nltk.corpus import stopwords
 
 # Add nltk path
 nltk.data.path.append('nltk_data')
+
 
 """Render message as an apology to user."""
 def apology(message, code=400, optional=''):
@@ -27,6 +26,7 @@ def apology(message, code=400, optional=''):
     return render_template("apology.html", optional=optional,top=code, bottom=escape(message)), code
 
 
+'''Ensure language is supported by the tokenizer'''
 def check_language_manually(lang):
     supported_languages = ['ar', 'az', 'eu', 'bn', 'ca', 'zh', 'da', 'nl', 'en', 'fi', 'fr', 'de', 'el', 'he', 'hinglish', 'hu', 'id', 'it', 'kk', 'ne', 'no', 'pt', 'ro', 'ru', 'sl', 'es', 'sv', 'tg', 'tr']
     full_name = ['arabic', 'azerbaijani', 'basque', 'bengali', 'catalan', 'chinese', 'danish', 'dutch', 'english', 'finnish', 'french', 'german', 'greek', 'hebrew', 'hinglish', 'hungarian', 'indonesian', 'italian', 'kazakh', 'nepali', 'norwegian', 'portuguese', 'romanian', 'russian', 'slovene', 'spanish', 'swedish', 'tajik', 'turkish']
@@ -35,18 +35,26 @@ def check_language_manually(lang):
         return res[lang]
     else:
         return 1
+        
 
+'''Create graphic of words withouts stopwords'''
+def create_bar_graph(dict_ns):
+    # Put the dictionary into a DataFrame
+    df = pd.DataFrame.from_dict(dict_ns, orient='index', columns=['count']).iloc[0:30]
 
-'''
-def check_language(lang):
-    supported_languages = stopwords.fileids()
-    full_name = Language.make(language=lang).display_name()
-    full_name = full_name.lower()
-    if full_name in supported_languages:
-        return full_name
-    else:
-        return 1
-'''
+    # Create a graphic bar with plotly
+    fig = px.bar(df, y='count',color='count')
+    fig.update_layout({
+        "paper_bgcolor":'rgba(0,0,0,0)',  # transparent
+        "plot_bgcolor":'rgba(0,0,0,0)',  # transparent
+        "font_color":"white",
+        "title":"30 most frequent words",
+        "xaxis_title":"Words (stopwords have been omitted)",
+        "yaxis_title":"Count",
+        })
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    return graphJSON
+
 
 
 '''Create a dictionary of words and frequency distribution'''
@@ -58,29 +66,40 @@ def create_freq_dic():
     return freq_d
 
 
-'''Create a list of words without stopwords'''
+'''Create a list of words without stopwords and save as json'''
 def create_ns_list(words, supp_lang):
     stop_words = set(stopwords.words(supp_lang))
     words_ns = [w for w in words if not w.lower() in stop_words]
+    with open("jsons/words_ns.json", 'w') as fp:
+        json.dump(words_ns, fp, sort_keys=True, indent=4)
     return words_ns
 
 
-'''Create a list of paragraphs'''
-def create_paragraph_list(st):
-    ans = remove_punctuation(st)
-    return ans.split('\n\n')
+'''Create a list of paragraphs and save as json'''
+def create_paragraph_list(text):
+    ans = remove_punctuation(text)
+    paragraphs = ans.split('\n\n')
+    with open("jsons/paragraphs.json", 'w') as fp:
+        json.dump(paragraphs, fp, sort_keys=True, indent=4)
+    return paragraphs
 
 
-'''Create a list of sentences'''
-def create_sentence_list(st):
-    st = remove_punctuation(st, '.')
-    return sent_tokenize(st)
+'''Create a list of sentences and save as json'''
+def create_sentence_list(text):
+    text = remove_punctuation(text, '.')
+    sentences = sent_tokenize(text)
+    with open("jsons/sentences.json", 'w') as fp:
+        json.dump(sentences, fp, sort_keys=True, indent=4)
+    return sentences
 
 
-'''Create a list of words'''
-def create_word_list(st):
-    st = remove_punctuation(st)
-    return word_tokenize(st)
+'''Create a list of words and save as json'''
+def create_word_list(text):
+    text = remove_punctuation(text)
+    words = word_tokenize(text)
+    with open("jsons/words.json", 'w') as fp:
+        json.dump(words, fp, sort_keys=True, indent=4)
+    return words
 
 
 '''Create a filtered dictionary'''
@@ -120,6 +139,7 @@ def first_clean(text):
     return 'cleaned.txt'
 
 
+'''Get cover url'''
 def get_cover_url(folder_link, id):
     # Go to image file
     id_h = (id + '-h')
@@ -136,7 +156,6 @@ def get_cover_url(folder_link, id):
 
 '''Get link to folder of ID'''
 def get_link_to_folder(id):
-
     # Use a mirror as multiple requests to the original site will let me get blocked
     head_link = 'http://eremita.di.uminho.pt/gutenberg/'
 
@@ -148,28 +167,9 @@ def get_link_to_folder(id):
     folder_link = head_link + middle_link
     return folder_link
 
-'''
-# Get an htm
-def get_htm(folder_link, id):
-
-    # Go to the htm file
-    id_h = (id + '-h')
-    link_to_test = folder_link + '/' + id_h + '/' + id_h + '.htm'
-    # e.g.: 6/7/8/2/67824/67824-h/68283-h/68283-h.htm
-
-    # Ensure link is working 
-    htm = requests.get(link_to_test)
-    if htm.status_code == 200:
-        htm = htm.text
-        return htm
-    else:
-        return apology("Could not open file", 400)
-
-'''
 
 '''Get text file from gutenberg project'''
 def get_text_from_htm(folder_link, id):
-
     # Go to the htm file
     id_h = (id + '-h')
     link_to_test = folder_link + '/' + id_h + '/' + id_h + '.htm'
@@ -183,46 +183,13 @@ def get_text_from_htm(folder_link, id):
         return text
     else:
         return 404
-        
-
-'''Create graphic of words withouts stopwords'''
-def graphic_bar(dict_ns):
-    # Put the dictionary into a DataFrame
-    df = pd.DataFrame.from_dict(dict_ns, orient='index', columns=['count']).iloc[0:30]
-
-    # Create a graphic bar with plotly
-    fig = px.bar(df, y='count',color='count')
-    fig.update_layout({
-        "paper_bgcolor":'rgba(0,0,0,0)',
-        "plot_bgcolor":'rgba(0,0,0,0)',
-        "font_color":"white",
-        "title":"30 most frequent words",
-        "xaxis_title":"Words (stopwords have been omitted)",
-        "yaxis_title":"Count",
-        })
-    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-    return graphJSON
-
 
 
 '''Remove punctuation from text'''
-def remove_punctuation(st, exception=''):  # Default exception is 'nothing' 
+def remove_punctuation(text, exception=''):  # Default exception is 'nothing' 
     punctuation = string.punctuation  # !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
     punctuation = punctuation.replace(exception, '')  # handle exception if there is any
-    for c in st:
+    for c in text:
         if c in punctuation:  
-            st = st.replace(c, '')
-    return st
-
-
-'''Save lists into json files'''
-def save_json_files(words, sentences, paragraphs, words_ns):
-    with open("jsons/words.json", 'w') as fp:
-        json.dump(words, fp, sort_keys=True, indent=4)
-    with open("jsons/sentences.json", 'w') as fp:
-        json.dump(sentences, fp, sort_keys=True, indent=4)
-    with open("jsons/paragraphs.json", 'w') as fp:
-        json.dump(paragraphs, fp, sort_keys=True, indent=4)
-    with open("jsons/words_ns.json", 'w') as fp:
-        json.dump(words_ns, fp, sort_keys=True, indent=4)
-    return
+            text = text.replace(c, '')
+    return text

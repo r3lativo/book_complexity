@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
 
-{% block title %}
-    | Results
-{% endblock %}
+{% block title %}| Results{% endblock %}
+
+
 
 {% block main %}
 
@@ -10,8 +10,8 @@
     <table class="table">
         <thead>
             <tr>
-                <th id="id" class="text-start">ID</th>
                 <th id="authors" class="text-start">Authors</th>
+                <th id="language" class="text-end">Lang</th>
                 <th id="title" class="text-start">Title</th>
                 <th id="analyse" class="text-end"></th>
             </tr>
@@ -20,15 +20,15 @@
         <tbody>
             {% for title in titles %}
                 <tr>
-                    <td id="id" class="text-start">
+                    <td id="authors" class="text-start">{{ authors[loop.index0] }}</td>
+                    <td id="language" class="text-end">{{ languages[loop.index0] }}</td>
+                    <td id="title" class="text-start">
                         <a target="_blank" rel="noopener noreferrer" href="{{ folder_links[loop.index0] }}">
-                            {{ ids[loop.index0] }}
+                            {{ title }}
                         </a>
                     </td>
-                    <td id="authors" class="text-start">{{ authors[loop.index0] }}</td>
-                    <td id="title" class="text-start">{{ title }}</td>
                     <td id="analyse" class="text-end">
-                        <a class="btn btn-dark" href="{{ url_for('analysis', id=ids[loop.index0]  ) }}">
+                        <a class="btn btn-dark" href="{{ url_for('analysis', id=ids[loop.index0]) }}">
                             Analyse
                         </a>
                     </td>

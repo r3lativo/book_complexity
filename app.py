@@ -1,5 +1,4 @@
 import NLP
-
 from flask import Flask, render_template, request
 from cs50 import SQL
 
@@ -12,21 +11,14 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///catalog.db")
 
-'''
-uri = os.getenv("postgres://catalog_c18n_user:J8GNIRkxnCUXAM7D40atSceEHbdgZzz3@dpg-ce4d7e5a4995pbufm7dg-a/catalog_c18n")
-if uri.startswith("postgres://"):
-    uri = uri.replace("postgres://", "postgresql://")
-db = SQL(uri)
 
-'''
-
-
-# Main page
+'''Main page'''
 @app.route("/")
 def index():
     return render_template("index.html")
 
 
+'''Analysis page'''
 @app.route("/analysis")
 def analysis():
 
@@ -56,15 +48,12 @@ def analysis():
     with open(cleaned_file) as file:
         text = file.read()
         words = NLP.create_word_list(text)
-        sentences = NLP.create_sentence_list(text)
-        paragraphs = NLP.create_paragraph_list(text)
+        # sentences = NLP.create_sentence_list(text)
+        # paragraphs = NLP.create_paragraph_list(text)
         words_ns = NLP.create_ns_list(words, supp_lang)
 
     # Get cover, if exists
-    cover = NLP.get_cover_url(folder_link, id)
-
-    # Save list into json files
-    NLP.save_json_files(words, sentences, paragraphs, words_ns)
+    # cover = NLP.get_cover_url(folder_link, id)
 
     # Create a frequency dictionary based on WORDS WITHOUT STOP (words_ns)
     freq_d_ns = NLP.create_freq_dic()
@@ -72,22 +61,23 @@ def analysis():
     dict_ns = NLP.filter_dict(freq_d_ns, ranked_list_ns)
     
     # Create graphic of words withouts stopwords
-    graphJSON = NLP.graphic_bar(dict_ns)
+    graphJSON = NLP.create_bar_graph(dict_ns)
 
     # Some counts to show
     words_ns_count = len(words_ns)
-    s_count = len(sentences)
-    p_count = len(paragraphs)
+    # s_count = len(sentences)
+    # p_count = len(paragraphs)
         
-    return render_template("analysis.html", graphJSON=graphJSON, title=title, author=author, cover=cover, words_ns_count=words_ns_count, s_count=s_count, p_count=p_count, folder_link=folder_link)
+    return render_template("analysis.html", graphJSON=graphJSON, title=title, author=author, words_ns_count=words_ns_count, folder_link=folder_link) #s_count=s_count, p_count=p_count, cover=cover, 
 
 
+'''Contact page'''
 @app.route("/contact")
 def contact():
     return render_template("contact.html")
 
 
-
+'''Random book page'''
 @app.route("/r_book")
 def r_book():
     '''
@@ -104,14 +94,12 @@ def r_book():
 
     # Show book
     '''
-
     return NLP.apology("Work in progress", 400, 'Go to manual search')
 
 
-# Search page
+'''Search page'''
 @app.route("/search", methods = ["GET", "POST"])
 def search():
-
     # Options permitted
     options = ['title', 'authors', 'id']
 
@@ -133,8 +121,9 @@ def search():
             return NLP.apology("option unauthorized", 400)
 
         # Search and get info
-        all = db.execute("SELECT * FROM catalog WHERE "+filter+" LIKE ? AND type = 'Text' ORDER BY authors LIMIT 10", '%'+query+'%')
+        all = db.execute("SELECT * FROM catalog WHERE "+filter+" LIKE ? AND type = 'Text' ORDER BY authors LIMIT 30", '%'+query+'%')
 
+        # If the query doesn't give anything back
         if len(all) == 0:
             return NLP.apology("No corresponding item :(", 404, "Search again")
 

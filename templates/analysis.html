@@ -1,37 +1,31 @@
 {% extends "layout.html" %}
 
-{% block title %}
-    | Analysis
-{% endblock %}
+{% block title %}| Analysis{% endblock %}
 
 {% block main %}
     <div class="mb-5 container text-center">
-        <h3 class="mb-2">
-            <a target="_blank" rel="noopener noreferrer" href="{{ folder_link }}">
-                {{ title }}
-            </a>
-        </h3>
-        <img class="cover mb-2" src="{{ cover }}">
-        <h4 class="mb-2">{{ author }}</h4>
+        <h2 class="mb-2">{{ author }}</h4>
+        <h1 class="mb-2"><a target="_blank" rel="noopener noreferrer" href="{{ folder_link }}">{{ title }}</a></h2>
+        <em>Tokenized words without stopwords: {{ words_ns_count }}</em>
+        <div id='chart' class='chart'></div>
         <div>
-            <em>words: {{ words_ns_count }} // sentences: {{ s_count }} // paragraphs: {{ p_count }}
-            </em>
+            <h3>Learn more</h3>
+            <p><a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Lexical_analysis#Tokenization">What is tokenization?</a></p>
+            <p><a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Stop_word">What are stopwords?</a></p>
         </div>
-
-        <div id='chart' class='chart'”></div>
     </div>
+
+    
 
     <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
     <script type='text/javascript'>
         var graphs = {{graphJSON | safe}};
         Plotly.plot('chart',graphs,{});
-
         
         //window.addEventListener('resize', function () { 
         //"use strict";
         //window.location.reload(); 
         //});
-        
     </script>
 
 {% endblock %}
