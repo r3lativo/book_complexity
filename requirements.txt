@@ -9,4 +9,4 @@ html2text
 plotly
 langcodes
 nltk
-language_data
+langcodes[data]
