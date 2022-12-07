@@ -2,7 +2,7 @@ cs50
 Flask
 Flask-Session
 gunicorn
-psycopg2
+psycopg2-binary
 requests
 pandas
 html2text
